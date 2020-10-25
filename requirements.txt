@@ -1,0 +1,2 @@
+# for converting markdown to plain text
+markdown~=3.3.2
