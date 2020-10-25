@@ -1,4 +1,8 @@
 repos:
+-   repo: https://github.com/jorisroovers/gitlint
+    rev: v0.14.0
+    hooks:
+    - id: gitlint
 -   repo: https://github.com/psf/black
     rev: 20.8b1
     hooks:
