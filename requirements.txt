@@ -1,2 +1,3 @@
 # for converting markdown to plain text
 markdown~=3.3.2
+html2text~=3.0.2
