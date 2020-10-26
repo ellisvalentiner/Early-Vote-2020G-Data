@@ -30,7 +30,7 @@ def convert_html_to_plain_text(filepath: Union[str, Path]) -> List[str]:
     return [unmark(line.strip()) for line in html2text.html2text(doc).splitlines()]
 
 
-def main(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
+def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
     record = {}
     for line in convert_html_to_plain_text(path):
         if REPORT_DATE.findall(line):
@@ -56,8 +56,12 @@ def main(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
     return record
 
 
-if __name__ == "__main__":
-    data = main()
+def main():
+    data = parser()
     if data:
         with open(here.parent.resolve() / "data.jsonl", "w+a") as fh:
             json.dump(data, fh)
+
+
+if __name__ == "__main__":
+    main()
