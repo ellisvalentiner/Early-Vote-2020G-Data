@@ -12,16 +12,16 @@ fi
 # Enter the repo directory
 cd temp
 
-# Iterate through each state
+# Iterate through national and state reports
 for state in index AK AL AR AZ CA CO CT DC DE FL GA HI IA ID IL IN KS KY LA MA MD ME MI MN MO MS MT NC ND NE NH NJ NM NV NY OH OK OR PA RI SC SD TN TX UT VA VT WA WI WV WY
 do
-  # List each commit containing changes for the state's HTML page
+  # List each commit containing changes for HTML page
   for commit in $(git rev-list --all --objects -- docs/${state}.html)
   do
     # Show the HTML document at that commit
     git show ${commit} docs/${state}.html > ../tmp.html
     # Extract information from the page
-    STATE=$state python ../parse.py
+    STATE=$state python ../parser.py
   done
 done
 

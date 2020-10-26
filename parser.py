@@ -35,7 +35,12 @@ def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
     for line in convert_html_to_plain_text(path):
         if REPORT_DATE.findall(line):
             for match in DATE.findall(line):
-                record["date"] = datetime.strptime(match, "%m/%d/%Y").date().isoformat()
+                try:
+                    record["date"] = (
+                        datetime.strptime(match, "%m/%d/%Y").date().isoformat()
+                    )
+                except ValueError:
+                    record["date"] = match
         elif RETURNED.findall(line):
             for match in BIG_NUMBER.findall(line):
                 record["returned"] = int(match.replace(",", ""))
@@ -62,8 +67,9 @@ def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
 def main():
     data = parser()
     if data:
-        with open(here.parent.resolve() / "data.jsonl", "w+a") as fh:
+        with open(here / "data.jsonl", "a") as fh:
             json.dump(data, fh)
+            fh.write("\n")
 
 
 if __name__ == "__main__":
