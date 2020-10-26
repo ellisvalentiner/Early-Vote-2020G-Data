@@ -52,7 +52,10 @@ def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
             for match in BIG_NUMBER.findall(line):
                 record["total"] = int(match.replace(",", ""))
     if record:
-        record["state"] = os.getenv("STATE", "")
+        locality = os.getenv("STATE", "")
+        if locality == "index":
+            locality = "US"
+        record["locality"] = locality
     return record
 
 

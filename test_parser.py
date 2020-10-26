@@ -14,7 +14,7 @@ class ParserTest(unittest.TestCase):
             "returned": 1790561,
             "rejected": 1268,
             "requested": 2985473,
-            "state": "",
+            "locality": "",
         }
         result = parser(here / "fixtures/MI.html")
         self.assertDictEqual(result, expected)
