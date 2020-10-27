@@ -16,8 +16,42 @@ Please consider making a donation to a charitable University of Florida fund for
 
 ## Description
 
-This project works to recover national and state data
+This project works to recover national and state data from the [https://github.com/ElectProject/Early-Vote-2020G](https://github.com/ElectProject/Early-Vote-2020G) repository.
+
+### Prerequisites:
+
+The code requires Python 3.6+.
+I recommend Python 3.9.
+
+I suggest installing the Python dependencies in a virtual environment:
 
 ```shell script
-./main.sh
+python -m venv venv
+pip install -r requirements.txt
+```
+
+### Main
+
+Run `main.sh` to produce a newline delimited JSON file containing national and state data recovered by parsing the `html` pages.
+
+```shell script
+/bin/zsh main.sh
+```
+
+### Output
+
+The output is a newline delimited JSON file.
+Each row contains data for a state on a given report date.
+
+Here is a sample, prettified, record:
+
+```json
+{
+  "date": "2020-10-23",
+  "total": 358783,
+  "in-person": 277118,
+  "returned": 81665,
+  "requested": 123057,
+  "locality": "AR"
+}
 ```
