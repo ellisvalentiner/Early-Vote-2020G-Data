@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import unittest
-from patterns import REPORT_DATE, BALLOTS_RETURNED, BALLOTS_REQUESTED, BIG_NUMBER, DATE
+from patterns import (
+    REPORT_DATE,
+    RETURNED,
+    REQUESTED,
+    BIG_NUMBER,
+    DATE,
+    REJECTED,
+    TURNOUT,
+)
 
 
 class DatePatternTest(unittest.TestCase):
@@ -88,12 +96,12 @@ class BallotsReturnedPatternTest(unittest.TestCase):
 
     def test_valid_examples(self):
         for example in self.valid_examples:
-            matches = BALLOTS_RETURNED.findall(example)
+            matches = RETURNED.findall(example)
             self.assertTrue(matches)
 
     def test_invalid_examples(self):
         for example in self.invalid_examples:
-            matches = BALLOTS_RETURNED.findall(example)
+            matches = RETURNED.findall(example)
             self.assertFalse(matches)
 
 
@@ -119,12 +127,82 @@ class BallotsRequestedPatternTest(unittest.TestCase):
 
     def test_valid_examples(self):
         for example in self.valid_examples:
-            matches = BALLOTS_REQUESTED.findall(example)
+            matches = REQUESTED.findall(example)
             self.assertTrue(matches)
 
     def test_invalid_examples(self):
         for example in self.invalid_examples:
-            matches = BALLOTS_REQUESTED.findall(example)
+            matches = REQUESTED.findall(example)
+            self.assertFalse(matches)
+
+
+class BallotsRejectedPatternTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.valid_examples = [
+            "Ballots Rejected: 1,371",
+            "Michigan election officials have rejected 1,371 mail ballots.",
+            "Mail Ballots Rejected: 1,639",
+        ]
+        self.invalid_examples = [
+            "Alaska voters have cast 73,843 mail ballots.",
+            "Ballots Returned: 145,574",
+            "Mail Ballots Returned: 81,665",
+            "Last Report: 10/23/2020",
+            "Returned Mail Ballots",
+            "Source: Arizona state and county election offices",
+            "Arizona does not distinguish between mail ballots returned and in-person votes.",
+            "(Requests are missing for Maricopa County at this time.)",
+            "Ballots Requested: 217,427",
+            "Mail Ballots Requested: 123,057",
+            "California voters have requested 21,879,949 mail ballots.",
+            "Ballots Requested: 3,032,987",
+        ]
+
+    def test_valid_examples(self):
+        for example in self.valid_examples:
+            matches = REJECTED.findall(example)
+            self.assertTrue(matches)
+
+    def test_invalid_examples(self):
+        for example in self.invalid_examples:
+            matches = REJECTED.findall(example)
+            self.assertFalse(matches)
+
+
+class PercentPatternTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.valid_examples = [
+            "Total Vote as Percentage of 2016 Total Turnout: 55.9%",
+            "Total Early Vote as Percentage of 2016 Total Turnout: 39.9%",
+            "Total Voted as Percentage of Registered Voters: 42.8%",
+            "Turnout Rate (of Registered Voters): 39.3%",
+        ]
+        self.invalid_examples = [
+            "Alaska voters have cast 73,843 mail ballots.",
+            "Ballots Returned: 145,574",
+            "Mail Ballots Returned: 81,665",
+            "Last Report: 10/23/2020",
+            "Returned Mail Ballots",
+            "Source: Arizona state and county election offices",
+            "Arizona does not distinguish between mail ballots returned and in-person votes.",
+            "(Requests are missing for Maricopa County at this time.)",
+            "Ballots Requested: 217,427",
+            "Mail Ballots Requested: 123,057",
+            "California voters have requested 21,879,949 mail ballots.",
+            "Ballots Requested: 3,032,987",
+            "Ballots Rejected: 1,371",
+            "Michigan election officials have rejected 1,371 mail ballots.",
+            "Mail Ballots Rejected: 1,639",
+        ]
+
+    def test_valid_examples(self):
+        for example in self.valid_examples:
+            matches = TURNOUT.findall(example)
+            self.assertTrue(matches)
+
+    def test_invalid_examples(self):
+        for example in self.invalid_examples:
+            matches = TURNOUT.findall(example)
             self.assertFalse(matches)
 
 

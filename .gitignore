@@ -1,5 +1,8 @@
 venv/
 .idea/
+temp/
+tmp.html
+*.jsonl
 
 ### Python template
 # Byte-compiled / optimized / DLL files
