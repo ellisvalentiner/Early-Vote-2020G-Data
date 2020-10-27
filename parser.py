@@ -18,6 +18,8 @@ from patterns import (
     REJECTED,
     IN_PERSON,
     TOTAL,
+    TURNOUT,
+    PERCENT,
 )
 from unmark import unmark
 
@@ -56,6 +58,9 @@ def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
         elif TOTAL.findall(line):
             for match in BIG_NUMBER.findall(line):
                 record["total"] = int(match.replace(",", ""))
+        elif TURNOUT.findall(line):
+            for match in PERCENT.findall(line):
+                record["turnout-rate"] = int(match.replace(",", ""))
     if record:
         locality = os.getenv("STATE", "")
         if locality == "index":

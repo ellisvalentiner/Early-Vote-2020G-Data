@@ -38,3 +38,14 @@ IN_PERSON = re.compile(
 )
 
 TOTAL = re.compile("(" f"Total Voted: {_number}" ")")
+
+TURNOUT = re.compile(
+    "("
+    "Total Vote as Percentage of 2016 Total Turnout: [0-9]{1,2}\\.[0-9]%"
+    "|Total Voted as Percentage of Registered Voters: [0-9]{1,2}\\.[0-9]%"
+    "|Total Early Vote as Percentage of 2016 Total Turnout: [0-9]{1,2}\\.[0-9]%"
+    "|Turnout Rate \\(of Registered Voters\\): [0-9]{1,2}\\.[0-9]%"
+    ")"
+)
+
+PERCENT = re.compile("[0-9]{1,2}\\.[0-9]")
