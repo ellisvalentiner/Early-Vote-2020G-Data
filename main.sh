@@ -33,5 +33,5 @@ cd ../
 sort tmp.jsonl | uniq > data.jsonl
 
 # Clean-up
-rm data.jsonl
+rm tmp.jsonl
 rm tmp.html
