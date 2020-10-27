@@ -60,7 +60,7 @@ def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
                 record["total"] = int(match.replace(",", ""))
         elif TURNOUT.findall(line):
             for match in PERCENT.findall(line):
-                record["turnout-rate"] = int(match.replace(",", ""))
+                record["turnout-rate"] = float(match)
     if record:
         locality = os.getenv("STATE", "")
         if locality == "index":
@@ -72,7 +72,7 @@ def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
 def main():
     data = parser()
     if data:
-        with open(here / "data.jsonl", "a") as fh:
+        with open(here / "tmp.jsonl", "a") as fh:
             json.dump(data, fh)
             fh.write("\n")
 

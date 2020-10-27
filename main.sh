@@ -30,4 +30,8 @@ done
 cd ../
 
 # Deduplicate records
-sort data.jsonl | uniq > dedup_data.jsonl
+sort tmp.jsonl | uniq > data.jsonl
+
+# Clean-up
+rm data.jsonl
+rm tmp.html
