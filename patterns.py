@@ -22,6 +22,7 @@ REQUESTED = re.compile(
     f".* voters have requested {_number} mail ballots."
     f"|ballots requested: {_number}"
     f"|mail ballot requests {_number}"
+    "|requested ballots"
     ")"
 )
 

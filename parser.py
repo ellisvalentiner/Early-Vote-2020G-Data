@@ -2,8 +2,13 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+import pandas as pd
 from pathlib import Path
-from typing import List, Dict, Union
+from typing import (
+    List,
+    Dict,
+    Union,
+)
 from urllib.request import urlopen
 from datetime import datetime
 
@@ -26,17 +31,47 @@ from unmark import unmark
 here = Path(__file__).parent.resolve()
 
 
-def convert_html_to_plain_text(filepath: Union[str, Path]) -> List[str]:
-    uri = filepath.as_uri()
-    doc = urlopen(url=uri).read().decode()  # nosec
+def resolve_filepath(path: Path) -> str:
+    return path.resolve().as_uri()
+
+
+def convert_html_to_plain_text(doc: str) -> List[str]:
     return [
         unmark(line.strip().lower()) for line in html2text.html2text(doc).splitlines()
     ]
 
 
-def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
+def find_tables(doc: str) -> List[pd.DataFrame]:
+    return pd.read_html(doc)
+
+
+def extract_total_row(df: pd.DataFrame) -> Dict:
     record = {}
-    for line in convert_html_to_plain_text(path):
+    for k, v in df.iloc[-1, :].to_dict().items():
+        column_name = k.lower()
+        if RETURNED.findall(column_name):
+            record["returned"] = v
+        elif REQUESTED.findall(column_name):
+            record["requested"] = v
+        elif REJECTED.findall(column_name):
+            record["rejected"] = v
+        elif IN_PERSON.findall(column_name):
+            record["in-person"] = v
+        elif TOTAL.findall(column_name):
+            record["total"] = v
+        elif TURNOUT.findall(column_name):
+            record["turnout-rate"] = v
+    return record
+
+
+def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
+    file_uri = resolve_filepath(path=path)
+    doc = urlopen(url=file_uri).read().decode()  # nosec
+    tables = find_tables(doc)
+    record = {}
+    for table in tables:
+        record.update(extract_total_row(table))
+    for line in convert_html_to_plain_text(doc=doc):
         if REPORT_DATE.findall(line):
             for match in DATE.findall(line):
                 try:
