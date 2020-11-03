@@ -22,7 +22,7 @@ do
     # Show the HTML document at that commit
     git show ${commit} docs/${state}.html > ../tmp.html
     # Extract information from the page
-    STATE=$state python ../parser.py
+    STATE=$state python3 ../parser.py
   done
 done
 

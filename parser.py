@@ -29,7 +29,9 @@ here = Path(__file__).parent.resolve()
 def convert_html_to_plain_text(filepath: Union[str, Path]) -> List[str]:
     uri = filepath.as_uri()
     doc = urlopen(url=uri).read().decode()  # nosec
-    return [unmark(line.strip()) for line in html2text.html2text(doc).splitlines()]
+    return [
+        unmark(line.strip().lower()) for line in html2text.html2text(doc).splitlines()
+    ]
 
 
 def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:

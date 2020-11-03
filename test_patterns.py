@@ -65,12 +65,12 @@ class ReportDatePatternTest(unittest.TestCase):
 
     def test_valid_examples(self):
         for example in self.valid_examples:
-            matches = REPORT_DATE.findall(example)
+            matches = REPORT_DATE.findall(example.lower())
             self.assertTrue(matches)
 
     def test_invalid_examples(self):
         for example in self.invalid_examples:
-            matches = REPORT_DATE.findall(example)
+            matches = REPORT_DATE.findall(example.lower())
             self.assertFalse(matches)
 
 
@@ -80,6 +80,7 @@ class BallotsReturnedPatternTest(unittest.TestCase):
             "Alaska voters have cast 73,843 mail ballots.",
             "Ballots Returned: 145,574",
             "Mail Ballots Returned: 81,665",
+            "Mail Ballots 148,424",
         ]
         self.invalid_examples = [
             "Last Report: 10/23/2020",
@@ -96,12 +97,12 @@ class BallotsReturnedPatternTest(unittest.TestCase):
 
     def test_valid_examples(self):
         for example in self.valid_examples:
-            matches = RETURNED.findall(example)
+            matches = RETURNED.findall(example.lower())
             self.assertTrue(matches)
 
     def test_invalid_examples(self):
         for example in self.invalid_examples:
-            matches = RETURNED.findall(example)
+            matches = RETURNED.findall(example.lower())
             self.assertFalse(matches)
 
 
@@ -113,6 +114,8 @@ class BallotsRequestedPatternTest(unittest.TestCase):
             "Mail Ballots Requested: 123,057",
             "California voters have requested 21,879,949 mail ballots.",
             "Ballots Requested: 3,032,987",
+            "Mail Ballot Requests 186,242",
+            "Ballots requested: 402,310",
         ]
         self.invalid_examples = [
             "Alaska voters have cast 73,843 mail ballots.",
@@ -127,12 +130,12 @@ class BallotsRequestedPatternTest(unittest.TestCase):
 
     def test_valid_examples(self):
         for example in self.valid_examples:
-            matches = REQUESTED.findall(example)
+            matches = REQUESTED.findall(example.lower())
             self.assertTrue(matches)
 
     def test_invalid_examples(self):
         for example in self.invalid_examples:
-            matches = REQUESTED.findall(example)
+            matches = REQUESTED.findall(example.lower())
             self.assertFalse(matches)
 
 
@@ -160,12 +163,12 @@ class BallotsRejectedPatternTest(unittest.TestCase):
 
     def test_valid_examples(self):
         for example in self.valid_examples:
-            matches = REJECTED.findall(example)
+            matches = REJECTED.findall(example.lower())
             self.assertTrue(matches)
 
     def test_invalid_examples(self):
         for example in self.invalid_examples:
-            matches = REJECTED.findall(example)
+            matches = REJECTED.findall(example.lower())
             self.assertFalse(matches)
 
 
@@ -197,12 +200,12 @@ class PercentPatternTest(unittest.TestCase):
 
     def test_valid_examples(self):
         for example in self.valid_examples:
-            matches = TURNOUT.findall(example)
+            matches = TURNOUT.findall(example.lower())
             self.assertTrue(matches)
 
     def test_invalid_examples(self):
         for example in self.invalid_examples:
-            matches = TURNOUT.findall(example)
+            matches = TURNOUT.findall(example.lower())
             self.assertFalse(matches)
 
 
