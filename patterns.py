@@ -14,6 +14,7 @@ RETURNED = re.compile(
     f".*voters have cast {_number} mail ballots."
     f"|ballots returned: {_number}"
     f"|mail ballots {_number}"
+    f"|returned ballots"
     ")"
 )
 
