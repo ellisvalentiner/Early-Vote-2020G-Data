@@ -91,7 +91,7 @@ def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
     file_uri = resolve_filepath(path=path)
     doc = urlopen(url=file_uri).read().decode()  # nosec
     if not doc:
-        log.info("Empty doc!")
+        log.warning("Empty doc!")
         exit(0)
     try:
         tables = find_tables(doc)
@@ -102,7 +102,7 @@ def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
         try:
             record.update(**extract_total_row(table))
         except IndexError:
-            log.info("IndexError processing a table")
+            log.warning("IndexError processing a table")
             print(table)
             exit(1)
     for line in convert_html_to_plain_text(doc=doc):
@@ -133,6 +133,21 @@ def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
             for match in PERCENT.findall(line):
                 record["turnout-rate"] = float(match)
     if record:
+        if not any(
+            map(
+                lambda x: x
+                in [
+                    "returned",
+                    "requested",
+                    "rejected",
+                    "in-person",
+                    "total",
+                    "turnout-rate",
+                ],
+                record.keys(),
+            )
+        ):
+            return {}
         locality = os.getenv("STATE", "")
         if locality == "index":
             locality = "US"
@@ -144,12 +159,8 @@ def main():
     data = parser()
     if data:
         with open(here / "tmp.jsonl", "a") as fh:
-            try:
-                json.dump(data, fh, default=to_serializable, allow_nan=False)
-                fh.write("\n")
-            except ValueError:
-                print(ValueError)
-                print(data)
+            json.dump(data, fh, default=to_serializable, allow_nan=False)
+            fh.write("\n")
 
 
 if __name__ == "__main__":
