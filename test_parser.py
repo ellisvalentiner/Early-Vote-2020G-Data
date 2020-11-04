@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 from pathlib import Path
-from parser import parser
+from data_parser import parser
 
 here = Path(__file__).parent.resolve()
 
