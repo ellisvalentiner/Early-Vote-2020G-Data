@@ -5,4 +5,4 @@ html2text~=2020.1.16
 # table parsing
 pandas~=1.1.4
 lxml~=4.6.1
-html5lib~=0.5.1
+html5lib~=1.1
