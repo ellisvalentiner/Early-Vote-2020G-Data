@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import json
+import logging
 import os
-import pandas as pd
+from datetime import datetime
 from pathlib import Path
 from typing import (
     List,
@@ -10,9 +11,11 @@ from typing import (
     Union,
 )
 from urllib.request import urlopen
-from datetime import datetime
+from functools import singledispatch
 
 import html2text
+import pandas as pd
+import numpy as np
 
 from patterns import (
     REPORT_DATE,
@@ -30,6 +33,25 @@ from unmark import unmark
 
 here = Path(__file__).parent.resolve()
 
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger(__name__)
+
+
+@singledispatch
+def to_serializable(val):
+    """Used by default."""
+    return str(val)
+
+
+@to_serializable.register(np.int64)
+def np_int64(val):
+    return int(val)
+
+
+@to_serializable.register(np.float)
+def np_float(val):
+    return "" if np.isnan(val) else float(val)
+
 
 def resolve_filepath(path: Path) -> str:
     return path.resolve().as_uri()
@@ -42,7 +64,7 @@ def convert_html_to_plain_text(doc: str) -> List[str]:
 
 
 def find_tables(doc: str) -> List[pd.DataFrame]:
-    return pd.read_html(doc)
+    return [df for df in pd.read_html(doc) if not df.empty]
 
 
 def extract_total_row(df: pd.DataFrame) -> Dict:
@@ -65,12 +87,24 @@ def extract_total_row(df: pd.DataFrame) -> Dict:
 
 
 def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
+    log.info(f"Processing state: {os.getenv('STATE', '')}")
     file_uri = resolve_filepath(path=path)
     doc = urlopen(url=file_uri).read().decode()  # nosec
-    tables = find_tables(doc)
+    if not doc:
+        log.info("Empty doc!")
+        exit(0)
+    try:
+        tables = find_tables(doc)
+    except ValueError:
+        tables = []
     record = {}
     for table in tables:
-        record.update(extract_total_row(table))
+        try:
+            record.update(**extract_total_row(table))
+        except IndexError:
+            log.info("IndexError processing a table")
+            print(table)
+            exit(1)
     for line in convert_html_to_plain_text(doc=doc):
         if REPORT_DATE.findall(line):
             for match in DATE.findall(line):
@@ -110,8 +144,12 @@ def main():
     data = parser()
     if data:
         with open(here / "tmp.jsonl", "a") as fh:
-            json.dump(data, fh)
-            fh.write("\n")
+            try:
+                json.dump(data, fh, default=to_serializable, allow_nan=False)
+                fh.write("\n")
+            except ValueError:
+                print(ValueError)
+                print(data)
 
 
 if __name__ == "__main__":
