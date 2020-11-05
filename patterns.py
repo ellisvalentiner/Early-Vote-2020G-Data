@@ -38,6 +38,7 @@ IN_PERSON = re.compile(
     "("
     f".* voters have cast {_number} in-person early votes."
     f"|in-person votes: {_number}"
+    f"|in-person early votes: {_number}"
     ")"
 )
 

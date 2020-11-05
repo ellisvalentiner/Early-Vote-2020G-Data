@@ -29,6 +29,20 @@ class ParserTest(unittest.TestCase):
         result = parser(here / "fixtures/SC.html")
         self.assertDictEqual(result, expected)
 
+    def test_georgia(self):
+        expected = {
+            "date": "2020-11-02",
+            "total": 3912819,
+            "in-person": 2689696,
+            "returned": 1782653,
+            "rejected": 1574,
+            "requested": 1782621,
+            "locality": "",
+            "turnout-rate": 56.5,
+        }
+        result = parser(here / "fixtures/GA.html")
+        self.assertDictEqual(result, expected)
+
 
 if __name__ == "__main__":
     unittest.main()
