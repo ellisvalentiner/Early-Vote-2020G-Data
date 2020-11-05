@@ -64,7 +64,10 @@ def convert_html_to_plain_text(doc: str) -> List[str]:
 
 
 def find_tables(doc: str) -> List[pd.DataFrame]:
-    return [df for df in pd.read_html(doc) if not df.empty]
+    try:
+        return [df for df in pd.read_html(doc) if not df.empty]
+    except ValueError:
+        return []
 
 
 def extract_total_row(df: pd.DataFrame) -> Dict:
@@ -93,10 +96,7 @@ def parser(path: Union[str, Path] = here.resolve() / "tmp.html") -> Dict:
     if not doc:
         log.warning("Empty doc!")
         exit(0)
-    try:
-        tables = find_tables(doc)
-    except ValueError:
-        tables = []
+    tables = find_tables(doc)
     record = {}
     for table in tables:
         try:
