@@ -14,6 +14,7 @@ RETURNED = re.compile(
     f".*voters have cast {_number} mail ballots."
     f"|ballots returned: {_number}"
     f"|mail ballots {_number}"
+    f"|returned ballots"
     ")"
 )
 
@@ -22,6 +23,7 @@ REQUESTED = re.compile(
     f".* voters have requested {_number} mail ballots."
     f"|ballots requested: {_number}"
     f"|mail ballot requests {_number}"
+    "|requested ballots"
     ")"
 )
 
@@ -36,6 +38,7 @@ IN_PERSON = re.compile(
     "("
     f".* voters have cast {_number} in-person early votes."
     f"|in-person votes: {_number}"
+    f"|in-person early votes: {_number}"
     ")"
 )
 

@@ -13,16 +13,18 @@ fi
 cd temp
 git fetch && git pull
 
-# Iterate through national and state reports
-for state in index AK AL AR AZ CA CO CT DC DE FL GA HI IA ID IL IN KS KY LA MA MD ME MI MN MO MS MT NC ND NE NH NJ NM NV NY OH OK OR PA RI SC SD TN TX UT VA VT WA WI WV WY
+# Iterate through national (index) and state reports
+for state in AK AL AR AZ CA CO CT DC DE FL GA HI IA ID IL IN KS KY LA MA MD ME MI MN MO MS MT NC ND NE NH NJ NM NV NY OH OK OR PA RI SC SD TN TX UT VA VT WA WI WV WY
 do
+  echo "Processing state: ${state}"
   # List each commit containing changes for HTML page
-  for commit in $(git rev-list --all --objects -- docs/${state}.html)
+  for commit in $(git log --pretty=format:%H --diff-filter=AM -- docs/${state}.html)
   do
+    echo "Processing commit: ${commit}"
     # Show the HTML document at that commit
-    git show ${commit} docs/${state}.html > ../tmp.html
+    git show ${commit}:docs/${state}.html > ../tmp.html
     # Extract information from the page
-    STATE=$state python3 ../parser.py
+    STATE=${state} python3 ../data_parser.py
   done
 done
 

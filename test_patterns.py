@@ -9,6 +9,8 @@ from patterns import (
     DATE,
     REJECTED,
     TURNOUT,
+    IN_PERSON,
+    TOTAL,
 )
 
 
@@ -206,6 +208,80 @@ class PercentPatternTest(unittest.TestCase):
     def test_invalid_examples(self):
         for example in self.invalid_examples:
             matches = TURNOUT.findall(example.lower())
+            self.assertFalse(matches)
+
+
+class InPersonPatternTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.valid_examples = [
+            "In-Person Votes: 794,394",
+            "In-Person Votes: 68,914",
+            "In-Person Votes: 4,332,221",
+        ]
+        self.invalid_examples = [
+            "Alaska voters have cast 73,843 mail ballots.",
+            "Ballots Returned: 145,574",
+            "Mail Ballots Returned: 81,665",
+            "Last Report: 10/23/2020",
+            "Returned Mail Ballots",
+            "Source: Arizona state and county election offices",
+            "Arizona does not distinguish between mail ballots returned and in-person votes.",
+            "(Requests are missing for Maricopa County at this time.)",
+            "Ballots Requested: 217,427",
+            "Mail Ballots Requested: 123,057",
+            "California voters have requested 21,879,949 mail ballots.",
+            "Ballots Requested: 3,032,987",
+            "Ballots Rejected: 1,371",
+            "Michigan election officials have rejected 1,371 mail ballots.",
+            "Mail Ballots Rejected: 1,639",
+        ]
+
+    def test_valid_examples(self):
+        for example in self.valid_examples:
+            matches = IN_PERSON.findall(example.lower())
+            self.assertTrue(matches)
+
+    def test_invalid_examples(self):
+        for example in self.invalid_examples:
+            matches = IN_PERSON.findall(example.lower())
+            self.assertFalse(matches)
+
+
+class TotalPatternTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.valid_examples = [
+            "Total Voted: 8,974,896",
+            "Total Voted: 3,912,819",
+        ]
+        self.invalid_examples = [
+            "Alaska voters have cast 73,843 mail ballots.",
+            "Ballots Returned: 145,574",
+            "Mail Ballots Returned: 81,665",
+            "Last Report: 10/23/2020",
+            "Returned Mail Ballots",
+            "Source: Arizona state and county election offices",
+            "Arizona does not distinguish between mail ballots returned and in-person votes.",
+            "(Requests are missing for Maricopa County at this time.)",
+            "Ballots Requested: 217,427",
+            "Mail Ballots Requested: 123,057",
+            "California voters have requested 21,879,949 mail ballots.",
+            "Ballots Requested: 3,032,987",
+            "Ballots Rejected: 1,371",
+            "Michigan election officials have rejected 1,371 mail ballots.",
+            "Mail Ballots Rejected: 1,639",
+            "In-Person Votes: 794,394",
+            "In-Person Votes: 68,914",
+            "In-Person Votes: 4,332,221",
+        ]
+
+    def test_valid_examples(self):
+        for example in self.valid_examples:
+            matches = TOTAL.findall(example.lower())
+            self.assertTrue(matches)
+
+    def test_invalid_examples(self):
+        for example in self.invalid_examples:
+            matches = TOTAL.findall(example.lower())
             self.assertFalse(matches)
 
 
